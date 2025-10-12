@@ -51,10 +51,10 @@ def  add_indicators(df):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("/data/BTCUSDT_1h_20251009_1045.csv")
+    df = pd.read_csv("data/BTCUSDT_1h_20251009_1045.csv")
     df = add_indicators(df)
     print(df.tail())
-    df.to_csv("/models/BTCUSDT_1h_20251009_1045_engineered_version.csv", index=False)
+    df.to_csv("models/BTCUSDT_1h_20251009_1045_engineered_version.csv", index=False)
     
     
     
