@@ -1,0 +1,7 @@
+timestamp,symbol,signal,probability,close_price,model_version,evaluated,outcome,profit_loss
+2025-10-12 02:28:34,BTCUSDT,SELL 📉,0.3,3620.03,v1,False,,
+2025-10-12 02:31:34,BTCUSDT,SELL 📉,0.3,3620.03,v1,False,,
+2025-10-12 02:34:21,BTCUSDT,SELL 📉,0.3,3620.03,v1,False,,
+2025-10-12 02:51:07,BTCUSDT,SELL 📉,0.3,3620.03,v1,False,,
+2025-10-12 03:10:41,BTCUSDT,HOLD 🤔,0.4633333333333333,3619.98,v1,False,,
+2025-10-12 03:25:49,BTCUSDT,HOLD 🤔,0.4633333333333333,3619.98,v1,False,,

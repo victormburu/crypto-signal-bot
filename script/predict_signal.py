@@ -1,10 +1,11 @@
 import joblib
 import pandas as pd
+from performance_tracker import log_signal
 
 def generate_signal(df):
     # Load trained model
-    model = joblib.load("../models/crypto_model.pkl")
-    scaler = joblib.load("../models/scaler_model.pkl")
+    model = joblib.load("/models/crypto_model.pkl")
+    scaler = joblib.load("/models/scaler_model.pkl")
 
     # Select latest features
     features = [
@@ -57,4 +58,5 @@ if __name__ == "__main__":
         "volume_ratio": [1.2],
     })
     signal, prob = generate_signal(df)
-    print(signal, prob)
+    close_price = df["close"].iloc[-1]
+    log_signal("BTCUSDT", signal, prob, close_price)
