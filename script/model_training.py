@@ -68,15 +68,15 @@ def train_model(df):
     print("Best Params:", grid.best_params_)
     print(f"✅ Model trained — Accuracy: {acc:.2f}")
 
-    joblib.dump(best_model, "models/crypto_model.pkl")
-    joblib.dump(scaler, "models/scaler_model.pkl")
+    joblib.dump(best_model, "/models/crypto_model.pkl")
+    joblib.dump(scaler, "/models/scaler_model.pkl")
     
     return best_model
 
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("models/BTCUSDT_1h_20251009_1045_engineered_version.csv")
+    df = pd.read_csv("/models/BTCUSDT_1h_20251009_1045_engineered_version.csv")
     df = train_model(df)
     
 
