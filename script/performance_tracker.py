@@ -87,9 +87,9 @@ def evaluate_signal():
         profit_loss = end_price - initial_price
         outcome = "UP" if profit_loss > 0 else "DOWN"
         
-        df.iloc[i, "evaluated"] = True
-        df.iloc[i, "outcome"] = outcome
-        df.iloc[i, "profit_loss"] = profit_loss
+        df.at[i, "evaluated"] = True
+        df.at[i, "outcome"] = outcome
+        df.at[i, "profit_loss"] = profit_loss
     
     df.to_csv(LOG_FILE, index=False)
     print("✅ Evaluation complete.")
@@ -124,12 +124,11 @@ def generate_report():
     win_rate = (wins / evaluated * 100) if evaluated > 0 else 0
 
     summary = (
-        f"📊 *Performance Report*\n"
+        f"📊 Performance Report\n"
         f"• Total Signals: {total}\n"
         f"• Evaluated: {evaluated}\n"
         f"• Wins: {wins}\n"
         f"• Win Rate: {win_rate:.2f}%\n"
-        f"🕒 Report Time: {datetime.now():%Y-%m-%d %H:%M:%S}"
     )
 
     # --- Save report to file ---
@@ -141,10 +140,11 @@ def generate_report():
 
     # --- Optional: deeper classification metrics ---
     try:
-        df["predicted"] = df["signal"].apply(lambda s: "UP" if s == "BUY" else "DOWN")
-        print("\nClassification Report:")
+        evaluated_df = df[df["evaluated"] == True].copy()
+        evaluated_df = evaluated_df.dropna(subset=["outcome"])
+        evaluated_df["predicted"] = df["signal"].apply(lambda s: "UP" if s == "BUY" else "DOWN")
+        evaluated_df["outcome"] = evaluated_df["outcome"].astype(str)
         print(classification_report(df["outcome"], df["predicted"], zero_division=0))
-
         cm = confusion_matrix(df["outcome"], df["predicted"])
         print("Confusion matrix:\n", cm)
     except Exception as e:
