@@ -5,7 +5,6 @@ import logging
 from datetime import datetime
 from dotenv import load_dotenv
 
-from logging.handlers import RotatingFileHandler
 from data_fetch import get_binance_data
 from feature_engineering import add_indicators
 from predict_signal import generate_signal
@@ -14,12 +13,16 @@ from performance_tracker import log_signal, evaluate_signal, generate_report
 
 load_dotenv()
 # === CONFIGURATION ===
-SYMBOL = os.getenv("SYMBOL", "BTCUSDT")
-INTERVAL = int(os.getenv("INTERVAL", 1))
+SYMBOL = "BTCUSDT"
+INTERVAL = "1h"
 
 # Configure logging
-handler = RotatingFileHandler("crypto_bot.log", maxBytes=5_000_000, backupCount=3)
-logging.getLogger().addHandler(handler)
+logging.basicConfig(
+    filename='bot.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    encoding='utf-8'  # <- important
+)
 
 #--job--
 def job():
