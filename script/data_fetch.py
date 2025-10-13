@@ -109,7 +109,7 @@ def my_job():
     update_csv()
     print("Done.\n")
 
-schedule.every(1).minutes.do(my_job)
+schedule.every(1).days.do(my_job)
     
 if __name__ =="__main__":
     try:
