@@ -15,6 +15,8 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 
 # Run your bot
+# Change working directory if main.py is under /app/script
+WORKDIR /app/script
 # Option 1: Run main.py (signal bot)
 # Option 2: Run scheduler.py if you want automated evaluation every 2 hours
 CMD ["python", "main.py"]

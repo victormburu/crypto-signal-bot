@@ -1,11 +1,18 @@
 import joblib
+import os
 import pandas as pd
 from performance_tracker import log_signal
 
+base_path = os.path.dirname(os.path.abspath(__file__))
 def generate_signal(df):
     # Load trained model
-    model = joblib.load("../models/crypto_model.pkl")
-    scaler = joblib.load("../models/scaler_model.pkl")
+    scaler_path = os.path.join(base_path, "..", "models", "scaler_model.pkl")
+    model_path = os.path.join(base_path, "..", "models", "crypto_model.pkl")
+    model = joblib.load(model_path)
+    scaler = joblib.load(scaler_path)
+
+    #model = joblib.load("../models/crypto_model.pkl")
+    #scaler = joblib.load("../models/scaler_model.pkl")
 
     # Select latest features
     features = [

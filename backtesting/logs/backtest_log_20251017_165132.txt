@@ -1,0 +1,6 @@
+===== BACKTEST REPORT =====
+Final Portfolio Value: $1000.00
+ROI: 0.00%
+Open Positions: 0
+Unrealized PnL: $0.00
+============================

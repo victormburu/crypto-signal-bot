@@ -1,0 +1,51 @@
+services:
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=victormburu03@gmail.com
+      - DOCKER_INFLUXDB_INIT_PASSWORD=36833857Vm9#
+      - DOCKER_INFLUXDB_INIT_ORG=CryptoOrg
+      - DOCKER_INFLUXDB_INIT_BUCKET=CryptoData
+      - DOCKER_INFLUXDB_INIT_RETENTION=1w
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=MyInfluxSuperToken
+    networks:
+      monitoring_net:
+        aliases:
+          - influxdb
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=victormburu03gmail.com
+      - GF_SECURITY_ADMIN_PASSWORD=36833857Vm9
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SECURITY_DISABLE_GRAVATAR=true
+      - GF_SERVER_ROOT_URL=http://localhost:3000/
+      - GF_INSTALL_PLUGINS=grafana-influxdb-flux-datasource
+    depends_on:
+      - influxdb
+    networks:
+      monitoring_net:
+        aliases:
+          - grafana
+    restart: unless-stopped
+
+volumes:
+  influxdb_data:
+  grafana_data:
+
+networks:
+  monitoring_net:
+    driver: bridge

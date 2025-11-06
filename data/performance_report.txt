@@ -1,5 +1,5 @@
 📊 Performance Report
-• Total Signals: 19
-• Evaluated: 18
-• Wins: 18
-• Win Rate: 100.00%
+• Total Signals: 70
+• Evaluated: 68
+• Wins: 45
+• Win Rate: 66.18%

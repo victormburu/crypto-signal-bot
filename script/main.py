@@ -1,8 +1,12 @@
 import schedule
 import time
-import os
+import os, sys
 import logging
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from monitoring.metric_logger import log_metrics
 from datetime import datetime
+
 from dotenv import load_dotenv
 
 from data_fetch import get_binance_data
@@ -11,9 +15,12 @@ from predict_signal import generate_signal
 from send_notification import send_telegram
 from performance_tracker import log_signal, evaluate_signal, generate_report
 
+
 load_dotenv()
+
 # === CONFIGURATION ===
 SYMBOL = "BTCUSDT"
+ 
 INTERVAL = "1h"
 
 # Configure logging
@@ -36,13 +43,18 @@ def job():
         logging.info("🧠 Generating trading signal...")
         signal, prob = generate_signal(df)
         current_price = df["close"].iloc[-1]
+        roi = 12.4
+        portfolio_value = 1530.75
+        open_positions = 2
         log_signal(symbol=SYMBOL, signal=signal, probability=prob, close_price=current_price)
-    
+        log_metrics(symbol=SYMBOL, price=current_price, signal=signal, roi=roi, portfolio_value=portfolio_value, open_positions=open_positions)
         message = (
             f"🕒 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
             f"📊 Symbol: {SYMBOL}\n"
+            f"💼Portfolio: {portfolio_value}\n"
             f"⏱ Interval: {INTERVAL}\n"
-            f"Signal: {signal}\n"
+            f"📈Roi: {roi}\n"
+            f"📊Signal: {signal}\n"
             f"Probability: {prob:.2%}"
         )
         

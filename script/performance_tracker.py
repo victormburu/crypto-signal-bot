@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import pandas as pd
 from datetime import datetime, timedelta
 from binance.client import Client
-from sklearn.metrics import classification_report, confusion_matrix
+from monitoring.metric_logger import log_metrics, log_performance_metrics
 
 
 
@@ -118,11 +118,12 @@ def generate_report():
         return "No evaluated signals yet."
 
     # --- Summary statistics ---
+   
     total = len(df)
     evaluated = len(evaluated_df)
     wins = (evaluated_df["profit_loss"] > 0).sum()
     win_rate = (wins / evaluated * 100) if evaluated > 0 else 0
-
+    
     summary = (
         f"📊 Performance Report\n"
         f"• Total Signals: {total}\n"
@@ -138,17 +139,15 @@ def generate_report():
 
     print(summary)
 
-    # --- Optional: deeper classification metrics ---
     try:
-        evaluated_df = df[df["evaluated"] == True].copy()
-        evaluated_df = evaluated_df.dropna(subset=["outcome"])
-        evaluated_df["predicted"] = df["signal"].apply(lambda s: "UP" if s == "BUY" else "DOWN")
-        evaluated_df["outcome"] = evaluated_df["outcome"].astype(str)
-        print(classification_report(df["outcome"], df["predicted"], zero_division=0))
-        cm = confusion_matrix(df["outcome"], df["predicted"])
-        print("Confusion matrix:\n", cm)
+        avg_profit = evaluated_df["profit_loss"].mean() if not evaluated_df.empty else 0
+        avg_abs = evaluated_df["profit_loss"].abs().mean()
+        roi = (avg_profit / avg_abs * 100)if avg_abs > 0 else 0
+        portfolio_value = 1000 + evaluated_df["profit_loss"].sum()  # simulated equity curve
+        log_metrics(SYMBOL, price=0, signal="REPORT", roi=roi, portfolio_value=portfolio_value, open_positions=0)
+        log_performance_metrics(symbol=SYMBOL, total_signals=total,roi=0.0, evaluated=evaluated, win_rate=win_rate, wins=wins)
     except Exception as e:
-        print(f"⚠️ Skipping classification report: {e}")
+        print(f"⚠️ Failed to log report metrics: {e}")
 
     # ✅ Return summary so main.py can send it to Telegram
     return summary
